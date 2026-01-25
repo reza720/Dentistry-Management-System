@@ -1,6 +1,25 @@
 # Dentistry Management System
 This system manages operations related to a dental clinic.  
 
+## Actors
+- Admin
+- Staff
+
+## Use Cases
+### Admin Use Cases
+- Manage purchases
+- Manage staff
+- Manage finances:
+  - Patient payments
+  - Purchase payments
+  - Staff salaries
+
+### Staff Use Cases
+- Manage patients
+- Manage appointments
+- Manage reports
+- Manage prescriptions
+
 ## Main Workflows
 ### Patient Treatment Workflow
 - A patient is registered in the system
@@ -22,31 +41,6 @@ This system manages operations related to a dental clinic.
   - Income (patient payments)
   - Expenses (staff salaries, purchases)
 
-
-
-
-## Actors
-- Admin
-- Staff
-
-## Use Cases
-### Admin Use Cases
-- Manage purchases
-- Manage staff
-- Manage finances:
-  - Patient payments
-  - Purchase payments
-  - Staff salaries
-
-### Staff Use Cases
-- Manage patients
-- Manage appointments
-- Manage reports
-- Manage prescriptions
-
-
-
-
 ## Objects, Their Fields, Constrains, Indexes, validations
 
 **Patient**:  
@@ -58,7 +52,7 @@ This system manages operations related to a dental clinic.
 **Staff**  
 - id: auto, primary key  
 - name: not null, letters and space only, not Empty  
-- email: not null, valid email  
+- email: not null, unique, valid email  
 - phone: not null, only numbers, length 10, not Empty  
 - salary: not null, min=0  
 - status: enum("Active", "On Break", "Left") default: Active, validate if it is one of the values  
@@ -71,7 +65,7 @@ This system manages operations related to a dental clinic.
 - date: not null, valid date, default now  
 - status: enum("Done", "Pending", "Cancelled") default: Pending, validate if it is one of the values  
 - cost: not null, cost >=0  
-- isPaid: enum("Yes", "No") default: No, validate if it is one of the values, auto change by payment  
+- isPaid: Boolean, default: false, validate if it is one of the values, auto change by payment  
 - timestamp: true  
 
 **Report**  
@@ -86,7 +80,7 @@ This system manages operations related to a dental clinic.
 - items: **Prescription-Item** junction table with one owner  
 - timestamp: true  
 
-**Prescription-Item**  
+**Prescription_Item**  
 - id: auto, primary key  
 - prescription_id: not null  
 - item: not null, not empty  
@@ -117,7 +111,6 @@ This system manages operations related to a dental clinic.
 - name: Budget  
 - amount: default: 0; added by patient payment, cut by salaries every 30 days, and cut by each purchase
 
-
 ## Relationship of Objects
 
 - Staff & Patient -> Appointment (1:n)  
@@ -126,9 +119,6 @@ This system manages operations related to a dental clinic.
 - Prescription -> Prescription-Item (1:n)  
 - Appointment -> Payment (1:0..1)  
 - Purchase -> Purchase_Item (1:n)
-
-
-
 
 ## Business Rules:
 **PatientService**
