@@ -47,7 +47,7 @@ This system manages operations related to a dental clinic.
 
 
 
-## Objects, Their Fields, Constrains, Indexe, validations
+## Objects, Their Fields, Constrains, Indexes, validations
 
 **Patient**:  
 - id: auto, primary key  
@@ -92,9 +92,8 @@ This system manages operations related to a dental clinic.
 - item: not null, not empty  
 - timestamp: true  
 
-**Patient Payment**  
+**Payment**  
 - id: auto, primary key  
-- patient_id: not null  
 - appointment_id: not null  
 - timestamp: true  
 
@@ -121,7 +120,12 @@ This system manages operations related to a dental clinic.
 
 ## Relationship of Objects
 
-
+- Staff & Patient -> Appointment (1:n)  
+- Appointment -> Report (1:0..1)  
+- Appointment -> Prescription (1:0..1)  
+- Prescription -> Prescription-Item (1:n)  
+- Appointment -> Payment (1:0..1)  
+- Purchase -> Purchase_Item (1:n)
 
 
 
