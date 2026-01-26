@@ -122,14 +122,10 @@ This system manages operations related to a dental clinic.
 
 ## Business Rules:
 **PatientService**
-  - Create, read, update, delete patients  
-  - Search/list patients  
-  - Fetch patient’s appointments, payments, and prescriptions  
+  - CRUD: Create, read: id, name, all, update:only phone number, delete: no 
 
 **StaffService**
-  - CRUD operations for staff  
-  - Update salary or status  
-  - Fetch staff’s appointments  
+  - CRUD: create, read: id, name, email, salary, status, update: email, phone, salary, status 
 
 **AppointmentService**
   - Schedule, update, cancel appointments  
