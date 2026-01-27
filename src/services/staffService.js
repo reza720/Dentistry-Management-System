@@ -1,41 +1,56 @@
-const { where } = require("sequelize");
+const {Op}=require("sequelize");
 const {Staff}=require("../models");
+const notFoundError=require("../utils/notFoundError");
 
 class StaffService{
+    //Creating Service
     async createStaff(data){
         return Staff.create(data);
     }
+    // Reading Services
+    // Generic
+    async getStaffByFilter(filter={}){
+        const staffs=await Staff.findAll({where:filter});
+        if(staffs.length==0)notFoundError("staffs");
+        return staffs;
+    }
+
     async getStaffs(){
-        return Staff.findAll();
+        return this.getStaffByFilter();
     }
     async getStaffById(id){
-        const staff=await Staff.findByPk(id);
-        if(!staff){
-            const err= new Error("Staff not found");
-            err.statusCode=404;
-            throw err;
-        }
+        const staff= await Staff.findByPk(id);
+        if(!staff)notFoundError("staff");
         return staff;
     }
     async getStaffByName(name){
-        const staffs=await Staff.findAll({where:{name:name}});
-        if(staffs.length==0){
-            const err=new Error("Staff not found");
-            err.statusCode=404;
-            throw err;
-        }
-        return staffs;
+        return this.getStaffByFilter({name});
     }
     async getStaffByEmail(email){
-        const staff=await Staff.findOne({where:{email:email}});
-        if(!staff){
-            const err=new Error("Staff not found");
-            err.statusCode=404;
-            throw err;
-        }
+        const staff=await Staff.findOne({where:{email}});
+        if(!staff)notFoundError("staff");
         return staff;
     }
     async getStaffsBySalaryRange(from,to){
-        const staffs=await Staff.findAll(where:{from,to});
+        return this.getStaffByFilter({
+            salary:{[Op.gte]:from,[Op.lte]:to}
+        });
+    }
+    async getStaffByStatus(status){
+        return this.getStaffByFilter({status});
+    }
+    //Updating Service
+    async updateStaff(id,data){
+        const staff=await this.getStaffById(id);
+        const allowedFields=["email", "phone", "salary", "status"];
+        const updatedData={};
+
+        for(let i=0; i<allowedFields.length;i++){
+            if(data[allowedFields[i]] !==undefined){
+                updatedData[allowedFields[i]]=data[allowedFields[i]];
+            }
+        }
+        await staff.update(updatedData);
+        return staff;
     }
 }
