@@ -41,7 +41,7 @@ This system manages operations related to a dental clinic.
   - Income (patient payments)
   - Expenses (staff salaries, purchases)
 
-## Objects, Their Fields, Constrains, Indexes, validations
+## Data Mode: Objects, Fields, Constrains, Relationships
 
 **Patient**:  
 - id: auto, primary key  
@@ -61,8 +61,8 @@ This system manages operations related to a dental clinic.
 **Appointment**  
 - id: auto, primary key  
 - patient_id: not null  
-- staff_id: not null  
-- date: not null, valid date, default now  
+- staff_id: not null
+- date: not null, valid date, date not in past
 - status: enum("Done", "Pending", "Cancelled") default: Pending, validate if it is one of the values  
 - cost: not null, cost >=0  
 - isPaid: Boolean, default: false, validate if it is one of the values, auto change by payment  
@@ -111,7 +111,7 @@ This system manages operations related to a dental clinic.
 - name: Budget  
 - amount: default: 0; added by patient payment, cut by salaries every 30 days, and cut by each purchase
 
-## Relationship of Objects
+**Relationship of Objects**
 
 - Staff & Patient -> Appointment (1:n)  
 - Appointment -> Report (1:0..1)  
@@ -122,17 +122,25 @@ This system manages operations related to a dental clinic.
 
 ## Business Rules:
 **PatientService**
-  - CRUD: Create, read: id, name, all, update:only phone number, delete: no 
+  - CRUD: 
+  Create: if exist
+  Read: id, name, all
+  Update:only phone number 
+  Delete: no 
 
 **StaffService**
-  - CRUD: create, read: id, name, email, salary, status, update: email, phone, salary, status 
+  - CRUD: 
+  Create: 
+  Read: all, id, name, email, salary, status
+  Update: email, phone, salary, status 
+  Delete: no
 
 **AppointmentService**
-  - Schedule, update, cancel appointments  
-  - Validate date, patient_id, staff_id  
-  - Change status (Pending, Done, Cancelled)  
-  - Track payment status  
-  - Link with Reports and Prescriptions  
+  - CRUD: 
+  Create: Patient should exist, staff is active
+  Read:(Nested data of patient/staff) all, id, patient, staff, date, status, cost, isPaid
+  Update: staff, status, isPaid
+  Delete: no
 
 **ReportService**
   - Create and update reports for appointments  

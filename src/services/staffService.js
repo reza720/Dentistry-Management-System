@@ -43,14 +43,15 @@ class StaffService{
     async updateStaff(id,data){
         const staff=await this.getStaffById(id);
         const allowedFields=["email", "phone", "salary", "status"];
-        const updatedData={};
+        const updatedStaff={};
 
         for(let i=0; i<allowedFields.length;i++){
             if(data[allowedFields[i]] !==undefined){
-                updatedData[allowedFields[i]]=data[allowedFields[i]];
+                updatedStaff[allowedFields[i]]=data[allowedFields[i]];
             }
         }
-        await staff.update(updatedData);
+        await staff.update(updatedStaff);
         return staff;
     }
 }
+module.exports=new StaffService();
