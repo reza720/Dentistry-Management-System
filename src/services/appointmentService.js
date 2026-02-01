@@ -81,7 +81,7 @@ class AppointmentService{
         await appointment.update(updatedAppointment);
         return appointment;
     }
-    // Node Delete is allowed
+    // Delete is not allowed
 }
 module.exports= new AppointmentService();
 

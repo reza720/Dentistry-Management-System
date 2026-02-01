@@ -111,7 +111,7 @@ This system manages operations related to a dental clinic.
 - name: Budget  
 - amount: default: 0; added by patient payment, cut by salaries every 30 days, and cut by each purchase
 
-**Relationship of Objects**
+**Relationships of Objects**
 
 - Staff & Patient -> Appointment (1:n)  
 - Appointment -> Report (1:0..1)  
@@ -126,30 +126,37 @@ This system manages operations related to a dental clinic.
   Create: if exist
   Read: id, name, all
   Update:only phone number 
-  Delete: no 
+  Delete: not allowed
 
 **StaffService**
   - CRUD: 
   Create: 
   Read: all, id, name, email, salary, status
   Update: email, phone, salary, status 
-  Delete: no
+  Delete: not allowed
 
 **AppointmentService**
   - CRUD: 
   Create: Patient should exist, staff is active
   Read:(Nested data of patient/staff) all, id, patient, staff, date, status, cost, isPaid
   Update: staff, status, isPaid
-  Delete: no
+  Delete: not allowed
 
 **ReportService**
-  - Create and update reports for appointments  
-  - Fetch reports by patient or appointment  
+  -CRUD: 
+  Create: Appointment should exist Read: all, id, Appointment(nested data of appointment, staff, patient), patient, staff
+  Update: not allowed
+  Delete: not allowed 
 
 
 **PrescriptionService**
-  - Create, update, read prescriptions  
-  - **Add, update, remove Prescription-Items** inside the same service  
+  - CRUD:
+  Create: Appointment must exist
+  Read: all, id, appointment(nested data of appointment), patient, staff
+  Update: not allowed
+  Delete: not allowed
+
+  - **Prescription-Items** inside the same service  
   - Fetch prescriptions by patient or appointment  
 
 **PatientPaymentService**
