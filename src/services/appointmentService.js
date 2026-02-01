@@ -1,4 +1,4 @@
-const {Staff,Patient, Appointment}=require("../models");
+const {Staff,Patient,Appointment}=require("../models");
 const {Op}=require("sequelize");
 const notFoundError=require("../utils/notFoundError");
 

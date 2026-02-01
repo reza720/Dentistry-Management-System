@@ -37,6 +37,36 @@ class ReportService{
     async getReportByAppointment(appointment_id){
         return this.getReportBy({appointment_id});
     }
+    async getReportsByPatient(patient_id){
+        const reports=await Report.findAll({include:[
+            {
+                model:Appointment,
+                where:{patient_id},
+                attributes:["id","patient_id","staff_id","date"],
+                include:[
+                    {model:Patient, attributes:["id","name"]},
+                    {model:Staff, attributes:["id","name"]}
+                ]
+            }
+        ]});
+        if(reports.length===0)notFoundError("reports");
+        return reports; 
+    }
+    async getReportsByStaff(staff_id){
+        const reports=await Report.findAll({include:[
+            {
+                model:Appointment,
+                where:{staff_id},
+                attributes:["id","patient_id","staff_id","date"],
+                include:[
+                    {model:Patient, attributes:["id","name"]},
+                    {model:Staff, attributes:["id","name"]}
+                ]
+            }
+        ]});
+        if(reports.length===0)notFoundError("reports");
+        return reports;
+    }
     // No update is allowed
     // No Delete is allowed
 }
